@@ -1,0 +1,189 @@
+#############
+MainActivity.java
+#############
+
+package com.example.prac_endsem;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.ToggleButton;
+
+public class MainActivity extends AppCompatActivity {
+
+    RadioGroup rg;
+    RadioButton rb1, rb2, rb3;
+
+    Intent intent;
+
+    ToggleButton tb;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        rg = (RadioGroup) findViewById(R.id.rg);
+        rb1 = (RadioButton) findViewById(R.id.radioButton3);
+        rb2 = (RadioButton) findViewById(R.id.radioButton4);
+        rb3 = (RadioButton) findViewById(R.id.radioButton5);
+
+        tb = (ToggleButton) findViewById(R.id.toggleButton);
+
+        intent = new Intent(this, MainActivity2.class);
+
+    }
+
+    public void onToggleButtonClicked(View view) {
+        startActivity(intent);
+    }
+    public void onRadioButtonClicked(View view) {
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Check which radio button was clicked
+        switch (view.getId()) {
+            case R.id.radioButton3:
+                if (checked)
+                    intent.putExtra("key", "Python");
+                break;
+            case R.id.radioButton4:
+                if (checked)
+                    intent.putExtra("key", "C++");
+                break;
+            case R.id.radioButton5:
+                if (checked)
+                    intent.putExtra("key", "C");
+                break;
+            default:
+                intent.putExtra("key", "None");
+
+        }
+    }
+}
+
+
+#############
+MainActivity2.java
+#############
+
+package com.example.prac_endsem;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.widget.ImageView;
+
+public class MainActivity2 extends AppCompatActivity {
+
+    Intent intent;
+
+    ImageView iv;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main2);
+
+        iv = (ImageView) findViewById(R.id.imageView);
+
+        intent = getIntent();
+
+        String key = intent.getStringExtra("key");
+        if(key.equals("Python"))
+            iv.setImageResource(R.drawable.python_logo);
+        else if(key.equals("C++"))
+            iv.setImageResource(R.drawable.cpp_logo);
+        else if(key.equals("C"))
+            iv.setImageResource(R.drawable.img);
+        else if (key.equals("None"))
+            iv.setImageResource(R.drawable.img_1);
+    }
+}
+
+
+###################
+activity_main.xml
+###################
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp" >
+
+    <RadioGroup
+        android:id="@+id/rg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp">
+
+        <RadioButton
+            android:id="@+id/radioButton3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:height="200dp"
+            android:text="Python"
+            android:background="@drawable/python_logo"
+            android:onClick="onRadioButtonClicked"/>
+
+        <RadioButton
+            android:id="@+id/radioButton4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:height="200dp"
+            android:text="C++"
+            android:background="@drawable/cpp_logo"
+            android:onClick="onRadioButtonClicked"/>
+
+        <RadioButton
+            android:id="@+id/radioButton5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:height="200dp"
+            android:text="C"
+            android:background="@drawable/img"
+            android:onClick="onRadioButtonClicked"/>
+
+    </RadioGroup>
+
+    <ToggleButton
+        android:id="@+id/toggleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="125dp"
+        android:layout_marginTop="500dp"
+        android:checked="false"
+        android:text="ToggleButton"
+        android:onClick="onToggleButtonClicked"/>
+
+</RelativeLayout>
+
+
+###################
+activity_main2.xml
+###################
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity2">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="336dp"
+        android:layout_height="209dp"
+        app:srcCompat="@drawable/ic_launcher_background"
+        tools:layout_editor_absoluteX="344dp"
+        tools:layout_editor_absoluteY="213dp"
+        tools:ignore="MissingConstraints" />
+</androidx.constraintlayout.widget.ConstraintLayout>
