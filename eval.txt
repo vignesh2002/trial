@@ -77,13 +77,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.Toast;
 
-public class MainActivity2 extends AppCompatActivity {
+public class MainActivity2 extends AppCompatActivity
+        implements AdapterView.OnItemSelectedListener {
 
     Intent intent;
 
     ImageView iv;
+
+    String[] courses = { "C", "Data structures",
+            "Interview prep", "Algorithms",
+            "DSA with java", "OS" };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +104,27 @@ public class MainActivity2 extends AppCompatActivity {
 
         intent = getIntent();
 
+        Spinner spin = findViewById(R.id.coursesspinner);
+        spin.setOnItemSelectedListener(this);
+
+        // Create the instance of ArrayAdapter
+        // having the list of courses
+        ArrayAdapter ad
+                = new ArrayAdapter(
+                this,
+                android.R.layout.simple_spinner_item,
+                courses);
+
+        // set simple layout resource file
+        // for each item of spinner
+        ad.setDropDownViewResource(
+                android.R.layout
+                        .simple_spinner_dropdown_item);
+
+        // Set the ArrayAdapter (ad) data on the
+        // Spinner which binds data to spinner
+        spin.setAdapter(ad);
+
         String key = intent.getStringExtra("key");
         if(key.equals("Python"))
             iv.setImageResource(R.drawable.python_logo);
@@ -103,6 +134,19 @@ public class MainActivity2 extends AppCompatActivity {
             iv.setImageResource(R.drawable.img);
         else if (key.equals("None"))
             iv.setImageResource(R.drawable.img_1);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        Toast.makeText(getApplicationContext(),
+                        courses[i],
+                        Toast.LENGTH_LONG)
+                .show();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }
 
@@ -186,4 +230,15 @@ activity_main2.xml
         tools:layout_editor_absoluteX="344dp"
         tools:layout_editor_absoluteY="213dp"
         tools:ignore="MissingConstraints" />
+    <Spinner
+        android:id="@+id/coursesspinner"
+        android:layout_height="50dp"
+        android:layout_width="160dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
