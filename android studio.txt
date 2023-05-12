@@ -1,0 +1,360 @@
+some general things which may be helpul : -
+
+Button btn1,btn2;
+EditText txt1,txt2;
+
+txt1=findViewById(R.id.text1);
+ String name = txt1.getText().toString();
+
+
+
+
+toast message for button ( insisde on create)
+
+Button button = (Button) findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),"button clicked message",Toast.LENGTH_LONG).show();
+}
+        });
+
+
+activity switching ( inside on create)
+
+Button button = (Button) findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+Intent myInt = new Intent(getApplicationContext(),MainActivity2.class);
+startActivity(myInt);
+}
+        });
+
+
+option menu :-
+
+<item
+        android:id="@+id/item1"
+        android:title="Item 1"
+         />
+
+    <item
+        android:id="@+id/item2"
+        android:title="Item 2"
+        />
+
+    <item
+        android:id="@+id/item3"
+        android:title="Item 3">
+
+        <menu>
+
+            <item
+                android:id="@+id/subitem1"
+                android:title="Sub Item 1" />
+
+            <item
+                android:id="@+id/subitem2"
+                android:title="Sub Item 2" />
+
+        </menu>
+
+    </item>
+
+
+</menu>
+
+
+
+(outside the onCreate)
+
+@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.example_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item1:
+                Toast.makeText(this, "Item 1 selected", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.item2:
+                Toast.makeText(this, "Item 2 selected", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.item3:
+                Toast.makeText(this, "Item 3 selected", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.subitem1:
+                Toast.makeText(this, "Sub Item 1 selected", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.subitem2:
+                Toast.makeText(this, "Sub Item 2 selected", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+
+popup menu(add implements) :- 
+
+
+
+public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
+
+    public void showPopup(View v) {
+        PopupMenu popup = new PopupMenu(this, v);
+        popup.setOnMenuItemClickListener(this);
+        popup.inflate(R.menu.popup_menu);
+        popup.show();
+    }
+
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item1:
+                Toast.makeText(this, "Item 1 clicked", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.item2:
+                Toast.makeText(this, "Item 2 clicked", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.item3:
+                Toast.makeText(this, "Item 3 clicked", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.item4:
+                Toast.makeText(this, "Item 4 clicked", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+
+
+<item
+        android:id="@+id/item1"
+        android:title="Item 1" />
+
+    <item
+        android:id="@+id/item2"
+        android:title="Item 2" />
+
+    <item
+        android:id="@+id/item3"
+        android:title="Item 3" />
+
+    <item
+        android:id="@+id/item4"
+        android:title="Item 4" />
+
+android:onClick="showPopup"
+
+
+contextual option :- 
+
+in onCreate
+ TextView textView = findViewById(R.id.text_view);
+
+        registerForContextMenu(textView);
+
+ @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.setHeaderTitle("Choose your option");
+        getMenuInflater().inflate(R.menu.example_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.option_1:
+                Toast.makeText(this, "Option 1 selected", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.option_2:
+                Toast.makeText(this, "Option 2 selected", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+
+
+    }
+
+
+sqlite : - 
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+import androidx.annotation.Nullable;
+
+public class DBhelper extends SQLiteOpenHelper {
+    public DBhelper(@Nullable Context context) {
+        super(context,"My datebase.db",null,1);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL("create Table userRecord ( SN INT primary key,name Text, Contact Text,DOB Text )");
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+        db.execSQL("drop Table if exsists userRecord");
+    }
+
+    public Boolean insertData(String name,String contact,String dob){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentvalue = new ContentValues();
+        contentvalue.put("name",name);
+        contentvalue.put("contact",contact);
+        contentvalue.put("DOB",dob);
+        Long result = db.insert("userRecord",null,contentvalue);
+
+        if(result==-1){
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    public Boolean updateData(String name,String contact,String dob){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentvalue = new ContentValues();
+        //contentvalue.put("name",name);
+        contentvalue.put("contact",contact);
+        contentvalue.put("DOB",dob);
+        Cursor currentRecord = db.rawQuery("select * from userRecord where name =?",new String[]{name});
+
+        if(currentRecord.getCount()>0){
+            int result = db.update("userRecord",contentvalue,"name=?",new String[]{name});
+            if(result==-1){
+                return false;
+            }
+            else{
+                return true;
+            }
+        }
+        else{
+            return false;
+        }
+        }
+
+    public Boolean deleteData(String name){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor findRecord=db.rawQuery("select * from userRecord where name=?",new String[]{name});
+
+        if(findRecord.getCount()>0){
+            int result=db.delete("userRecord","name=?",new String[]{name});
+            if(result==-1){
+                return false;
+            }
+            else return true;
+        }
+        else {
+            return false;
+        }
+        }
+
+    public Cursor viewuserdata(){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor findallRecord=db.rawQuery("select * from userRecord",null);
+        return findallRecord;
+    }
+    }
+
+
+
+
+main.java(inside onCreate)
+
+DBHelper db = new DBHelper (this) ;
+
+btnInsert.setOnCLickListener(new View.OnCtickListener () {
+@Override
+public void onClick(View view) {
+String name = txtName.getText().toString);
+String contact = txtContact.getText().toString();
+String dob = txtDob.getText().toString();
+
+Boolean checkDBop = DB.InsertUserData(name,contact,dob);
+if(checkDBop == true){
+Toast.makeText (MainActivity.this,"New Record Isnerted Sucessfully", Toast. LENGTH_LONG).show();
+}
+else
+{
+Toast. make Text (MainActivity.this,"UNABLE to Isnented Sucesstully",Toast.LENGTH LONG).show();
+}
+
+btnUpdate.setOnCLickListener(new View.OnCtickListener () {
+@Override
+public void onClick(View view) {
+String name = txtName.getText().toString);
+String contact = txtContact.getText().toString();
+String dob = txtDob.getText().toString();
+
+Boolean checkupdate = DB.updateUserData(name,contact,dob);
+if(checkupdate == true){
+Toast.makeText (MainActivity.this,"Record updated successfully", Toast. LENGTH_LONG).show();
+}
+else
+{
+Toast. make Text (MainActivity.this,"UNABLE to update",Toast.LENGTH LONG).show();
+}
+
+
+btndelete.setOnCLickListener(new View.OnCtickListener () {
+@Override
+public void onClick(View view) {
+String name = txtName.getText().toString);
+
+
+Boolean checkdelete = DB.deleteUserData(name);
+if(checkdelete == true){
+Toast.makeText (MainActivity.this,"Record deleted successfully", Toast. LENGTH_LONG).show();
+}
+else
+{
+Toast. make Text (MainActivity.this,"UNABLE to delete",Toast.LENGTH LONG).show();
+}
+
+
+btnview.setOnCLickListener(new View.OnClickListener () {
+@Override
+public void onClick(View view) {
+Cursor records = db.viewuserdata();
+if(records.getCount()==0){
+Toast.makeText(MainActivity.this," no data Found ",Toast.LENGTH_LONG).show();
+return ;
+}
+StringBuffer allrecords = new StringBuffer();
+while(records.moveToNext()){
+allrecords.append("Name : "+records.getString(0)+"\n");
+allrecords.append("Contact : "+records.getString(1)+"\n");
+allrecords.append("DOB : "+records.getString(2)+"\n");
+}
+AlertDialog.Builder builder = new AlerDialog.Builder(MainActivity.this);
+builder.setCancelable(true);
+builder.setTitle("View all records");
+builder.setMessage(allrecords.toString());
+builder.show();
+
+}
